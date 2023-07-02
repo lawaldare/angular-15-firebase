@@ -9,7 +9,6 @@ import { map, tap } from 'rxjs';
 })
 export class UploadImageComponent implements OnInit {
   selectedFiles?: FileList;
-  currentFileUpload?: FileUpload;
   images$ = this.uploadService
     .getFiles()
     .snapshotChanges()
@@ -31,17 +30,17 @@ export class UploadImageComponent implements OnInit {
   }
 
   upload(): void {
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
+    if (this.selectedFiles?.length) {
+      Array.from(this.selectedFiles).forEach((file) => {
+        if (file) {
+          const currentFileUpload = {
+            file,
+            name: file.name,
+          };
+          this.uploadService.pushFileToStorage(currentFileUpload).subscribe();
+        }
+      });
       this.selectedFiles = undefined;
-
-      if (file) {
-        const currentFileUpload = {
-          file,
-          name: file.name,
-        };
-        this.uploadService.pushFileToStorage(currentFileUpload).subscribe();
-      }
     }
   }
 
