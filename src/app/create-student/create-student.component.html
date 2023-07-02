@@ -1,0 +1,39 @@
+<section>
+  <div class="container">
+    <h1 class="text-center">Todos</h1>
+    <form [formGroup]="form">
+      <input type="text" class="form-control" formControlName="todo" placeholder="Enter your todo">
+      <button class="btn btn-primary" (click)="addTodo()">Add Todo</button>
+    </form>
+    <ng-container *ngIf="todos$ | async as todos; else loadingTemplate">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">S/N</th>
+            <th scope="col">Todo</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let todo of todos; let i = index">
+            <th>{{ i + 1 }}</th>
+            <td>{{ todo['text'] }}</td>
+            <td>
+              <div class="actions">
+                <button class="btn btn-danger" (click)="deletedTodo(todo.id)">Delete Todo</button>
+                <button class="btn btn-secondary ml-5" (click)="editTodo(todo)">Edit Todo</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <p>Loading...</p>
+    </ng-template>
+    <form [formGroup]="editForm" *ngIf="showEditForm">
+      <input type="text" class="form-control" formControlName="todoToBeEdited" placeholder="Edit your todo">
+      <button class="btn btn-primary" (click)="updateTodo()">Edit Todo</button>
+    </form>
+  </div>
+</section>

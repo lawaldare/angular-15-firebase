@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "schoolmate-49739": {
+      "hosting": {
+        "firestore": [
+          "schoolmate-49739"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "schoolmate-49739"
+  }
+}

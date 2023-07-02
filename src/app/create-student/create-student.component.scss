@@ -1,0 +1,19 @@
+form {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  input {
+    margin-right: 30px;
+  }
+
+  button {
+    width: 200px;
+  }
+}
+
+.actions {
+  .btn-secondary {
+    margin-left: 20px;
+  }
+}

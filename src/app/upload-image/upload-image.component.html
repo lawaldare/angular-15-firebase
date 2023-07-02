@@ -1,0 +1,45 @@
+<section>
+  <div class="container">
+    <h1 class="text-center">Image Upload</h1>
+    <div class="row">
+      <div class="col-8">
+        <label>
+          <input type="file" class="text-nowrap text-truncate" (change)="selectFile($event)" />
+        </label>
+      </div>
+
+      <div class="col-4">
+        <button class="btn btn-success btn-sm" [disabled]="!selectedFiles" (click)="upload()">
+          Upload
+        </button>
+      </div>
+    </div>
+    <ng-container *ngIf="images$ | async as images; else loadingTemplate">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">S/N</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let image of images; let i = index">
+            <th>{{ i + 1 }}</th>
+            <td>
+              <a [href]="image.url" target="_blank">{{ image['name'] }}</a>
+            </td>
+            <td>
+              <div class="actions" *ngIf="image">
+                <button class="btn btn-danger" (click)="deletedImage(image)">Delete Image</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <p>Loading...</p>
+    </ng-template>
+  </div>
+</section>
