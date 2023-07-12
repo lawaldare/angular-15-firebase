@@ -14,32 +14,42 @@
         </button>
       </div>
     </div>
-    <ng-container *ngIf="images$ | async as images; else loadingTemplate">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">S/N</th>
-            <th scope="col">Name</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let image of images; let i = index">
-            <th>{{ i + 1 }}</th>
-            <td>
-              <a [href]="image.url" target="_blank">{{ image['name'] }}</a>
-            </td>
-            <td>
-              <div class="actions" *ngIf="image">
-                <button class="btn btn-danger" (click)="deletedImage(image)">Delete Image</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ng-container>
-    <ng-template #loadingTemplate>
-      <p>Loading...</p>
-    </ng-template>
+    <div class="row mt-5">
+      <div class="col-6">
+
+        <ng-container *ngIf="images$ | async as images; else loadingTemplate">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">S/N</th>
+                <th scope="col">File Name</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let image of images; let i = index" (click)="selectRow(image)">
+                <th>{{ i + 1 }}</th>
+                <td>
+                  {{ image['name'] }}
+                </td>
+                <td>
+                  <div class="actions" *ngIf="image">
+                    <button class="btn btn-danger" (click)="deletedImage(image)">Delete Image</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <p>Loading...</p>
+        </ng-template>
+      </div>
+      <div class="col-6">
+        <div class="img-container">
+          <img [src]="imageUrl" alt="">
+        </div>
+      </div>
+    </div>
   </div>
 </section>

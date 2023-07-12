@@ -20,6 +20,8 @@ export class UploadImageComponent implements OnInit {
         }));
       })
     );
+  imageUrl: string =
+    'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
 
   constructor(private uploadService: UploadService) {}
 
@@ -37,7 +39,9 @@ export class UploadImageComponent implements OnInit {
             file,
             name: file.name,
           };
-          this.uploadService.pushFileToStorage(currentFileUpload).subscribe();
+          this.uploadService
+            .pushFileToStorage(currentFileUpload)
+            .subscribe((data) => {});
         }
       });
       this.selectedFiles = undefined;
@@ -46,5 +50,9 @@ export class UploadImageComponent implements OnInit {
 
   deletedImage(image: any): void {
     this.uploadService.deleteFile(image);
+  }
+
+  selectRow(image: any) {
+    this.imageUrl = image.url;
   }
 }

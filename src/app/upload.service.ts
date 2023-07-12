@@ -42,7 +42,10 @@ export class UploadService {
           });
         })
       )
-      .subscribe();
+      .subscribe(
+        () => {},
+        (error) => {}
+      );
 
     return uploadTask.percentageChanges();
   }
