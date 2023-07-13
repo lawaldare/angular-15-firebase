@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { TodoService } from '../todo-service.service';
+import { TodoService } from '../../todo-service.service';
 import { map, tap } from 'rxjs';
+import { TodoState } from '../state/todo.model';
+import { TodoSelectors } from '../state/todo.selectors';
+import { Store } from '@ngrx/store';
+import { TodoAction } from '../state/todo.actions';
 
 export interface Todo {
   id: string;
@@ -9,11 +13,11 @@ export interface Todo {
 }
 
 @Component({
-  selector: 'app-create-student',
-  templateUrl: './create-student.component.html',
-  styleUrls: ['./create-student.component.scss'],
+  selector: 'dl-todo',
+  templateUrl: './todo.component.html',
+  styleUrls: ['./todo.component.scss'],
 })
-export class CreateStudentComponent implements OnInit {
+export class TodoComponent implements OnInit {
   form = this.formBuilder.group({
     todo: new FormControl(''),
   });
@@ -25,32 +29,17 @@ export class CreateStudentComponent implements OnInit {
   showEditForm = false;
   todoEdited!: Todo;
 
-  todos$ = this.todoService.getTodos().pipe(
-    map((todos) =>
-      todos.sort((a: Todo, b: Todo) => {
-        var textA = a.text.toUpperCase();
-        var textB = b.text.toUpperCase();
-
-        if (textA < textB) {
-          return -1;
-        }
-        if (textA > textB) {
-          return 1;
-        }
-
-        return 0;
-      })
-    )
-  );
+  readonly todos$ = this.store.select(TodoSelectors.todos);
 
   constructor(
     private formBuilder: FormBuilder,
-    private todoService: TodoService
+    private todoService: TodoService,
+    private store: Store<TodoState>
   ) {}
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+    console.log('heelo there');
+    this.store.dispatch(TodoAction.getTodos());
   }
 
   addTodo() {
@@ -60,7 +49,7 @@ export class CreateStudentComponent implements OnInit {
         id: new Date().getTime().toString(),
         text,
       };
-      this.todoService.addTodo(todo);
+      this.store.dispatch(TodoAction.addTodo({ params: { todo } }));
       this.form.reset();
     } else {
       alert('Please enter a todo');
@@ -83,7 +72,7 @@ export class CreateStudentComponent implements OnInit {
         id: this.todoEdited.id,
         text: updatedTodoText,
       };
-      this.todoService.updateTodo(todo);
+      this.store.dispatch(TodoAction.updateTodo({ params: { todo } }));
       this.form.reset();
       this.showEditForm = false;
     } else {
@@ -93,7 +82,7 @@ export class CreateStudentComponent implements OnInit {
 
   deletedTodo(id: string) {
     if (confirm(`Are you sure you want to delete this todo`)) {
-      this.todoService.deleteTodo(id);
+      this.store.dispatch(TodoAction.deleteTodo({ params: { todoId: id } }));
     }
   }
 }
